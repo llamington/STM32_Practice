@@ -3,6 +3,19 @@
 
 #include <stdint.h>
 
+/* Coefficients */
+#define VEML6075_COEFF_A 2.22
+#define VEML6075_COEFF_B 1.33
+#define VEML6075_COEFF_C 2.95
+#define VEML6075_COEFF_D 1.75
+#define VEML6075_COEFF_ALPHA 1 // set these once golden sample is determined
+#define VEML6075_COEFF_BETA 1
+#define VEML6075_COEFF_GAMMA 1
+#define VEML6075_COEFF_DELTA 1
+
+/* UV types */
+#define VEML6075_TYPE_UVA 0x01
+#define VEML6075_TYPE_UVB 0X00
 /* VEML6075 slave address */
 #define VEML6075_ADDR 0x20 // 7-bit: 0x10
 /* Registers define */
@@ -44,5 +57,6 @@ struct i2c_msg {
 
 int VEML6075_read_word(uint16_t addr, uint8_t reg, uint16_t *val);
 int VEML6075_write_word(uint16_t addr, uint8_t reg, uint16_t val);
+uint16_t uv_calc(uint16_t uvx, uint16_t comp1, uint16_t comp2, uint8_t uv_type);
 
 #endif

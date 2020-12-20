@@ -93,6 +93,8 @@ int main(void)
   uint16_t uvcomp1_data;
   uint16_t uvcomp2_data;
 
+  uint16_t uva_calc;
+  uint16_t uvb_calc;
 
 
 
@@ -103,7 +105,7 @@ int main(void)
   dev.settings.filter = BME280_FILTER_COEFF_16;
 
   settings_sel = BME280_OSR_PRESS_SEL | BME280_OSR_TEMP_SEL | BME280_OSR_HUM_SEL | BME280_FILTER_SEL;
-  uint8_t to_print_buf[30];
+  uint8_t to_print_buf[100];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -132,10 +134,10 @@ int main(void)
   req_delay = bme280_cal_meas_delay(&dev.settings)*1000;
 
   VEML6075_conf = VEML6075_CONF_DEFAULT | VEML6075_CONF_SD;
-  //rslt = VEML6075_write_word(VEML6075_ADDR, VEML6075_CONF_REG, VEML6075_conf);
+  rslt = VEML6075_write_word(VEML6075_ADDR, VEML6075_CONF_REG, VEML6075_conf);
   /* Enable VEML6075 */
   VEML6075_conf = VEML6075_CONF_DEFAULT;
-  //rslt = VEML6075_write_word(VEML6075_ADDR, VEML6075_CONF_REG, VEML6075_conf);
+  rslt = VEML6075_write_word(VEML6075_ADDR, VEML6075_CONF_REG, VEML6075_conf);
   /* Loop for polling VEML6075 data */
 
   /* USER CODE END 2 */
@@ -147,15 +149,17 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_ID_REG, &uva_data);
+	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_UVA_DATA_REG, &uva_data);
 	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_UVB_DATA_REG, &uvb_data);
 	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_UVCOMP1_DATA_REG, &uvcomp1_data);
 	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_UVCOMP2_DATA_REG, &uvcomp2_data);
+	uva_calc = uv_calc(uva_data, uvcomp1_data, uvcomp2_data, VEML6075_TYPE_UVA);
+	uvb_calc = uv_calc(uvb_data, uvcomp1_data, uvcomp2_data, VEML6075_TYPE_UVB);
 
 	rslt = bme280_set_sensor_mode(BME280_FORCED_MODE, &dev);
 	dev.delay_us(req_delay, dev.intf_ptr);
 	rslt = bme280_get_sensor_data(BME280_ALL, &comp_data, &dev);
-	sprintf((char*)to_print_buf, "Humidity: %.2f\n\r", comp_data.humidity);
+	sprintf((char*)to_print_buf, "Temperature: %.2f Humidity: %.2f UVA: %d UVB: %d\n\r", comp_data.temperature, comp_data.humidity, uva_calc, uvb_calc);
 	HAL_UART_Transmit(&huart2, to_print_buf, strlen(to_print_buf), HAL_MAX_DELAY);
 	HAL_Delay(500);
   }
@@ -371,12 +375,11 @@ int i2c_transfer(struct i2c_msg *msgs, int num)
 {
 	struct i2c_msg* current_msg = &msgs[0];
 	HAL_StatusTypeDef stat;
-	stat = HAL_I2C_Master_Transmit(&hi2c1, current_msg->addr, current_msg->buf, current_msg->len, HAL_MAX_DELAY);
-	if (stat != HAL_OK) {
-		return stat;
-	} else if (num > 1) {
-		current_msg = &msgs[1];
-		stat = HAL_I2C_Master_Receive(&hi2c1, current_msg->addr, current_msg->buf, current_msg->len, HAL_MAX_DELAY);
+	if (num == 1) { // operation is a memory write
+		stat = HAL_I2C_Mem_Write(&hi2c1, current_msg->addr, current_msg->buf[0], I2C_MEMADD_SIZE_8BIT, &current_msg->buf[1], current_msg->len-1, HAL_MAX_DELAY);
+	} else { // operation is a memory read
+		struct i2c_msg* second_msg = &msgs[1];
+		stat = HAL_I2C_Mem_Read(&hi2c1, current_msg->addr, current_msg->buf[0], I2C_MEMADD_SIZE_8BIT, second_msg->buf, second_msg->len, HAL_MAX_DELAY);
 	}
 	return stat;
 }

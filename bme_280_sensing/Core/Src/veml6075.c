@@ -47,3 +47,17 @@ int VEML6075_write_word(uint16_t addr, uint8_t reg, uint16_t val)
 	}
 	return err;
 }
+
+/* Calculates the UV level for the given UV type*/
+uint16_t uv_calc(uint16_t uvx, uint16_t comp1, uint16_t comp2, uint8_t uv_type)
+{
+	uint16_t calculated;
+	if(uv_type == VEML6075_TYPE_UVA) {
+		 calculated = uvx - (VEML6075_COEFF_A * VEML6075_COEFF_ALPHA * comp1) / VEML6075_COEFF_GAMMA -
+				 (VEML6075_COEFF_B * VEML6075_COEFF_ALPHA * comp2) / VEML6075_COEFF_DELTA;
+	} else {
+		calculated = uvx - (VEML6075_COEFF_C * VEML6075_COEFF_BETA * comp1) / VEML6075_COEFF_GAMMA -
+				 (VEML6075_COEFF_D * VEML6075_COEFF_BETA * comp2) / VEML6075_COEFF_DELTA;
+	}
+	return calculated;
+}

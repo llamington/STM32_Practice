@@ -1,0 +1,3 @@
+veml6075.c:4:5:VEML6075_read_word	56	static
+veml6075.c:30:5:VEML6075_write_word	48	static
+veml6075.c:52:10:uv_calc	32	static
