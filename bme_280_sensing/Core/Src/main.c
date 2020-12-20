@@ -26,6 +26,7 @@
 #include "stdio.h"
 #include "bme280.h"
 #include "bme280_defs.h"
+#include "veml6075.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -86,6 +87,14 @@ int main(void)
   uint8_t settings_sel;
   uint32_t req_delay;
 
+  uint16_t VEML6075_conf;
+  uint16_t uva_data;
+  uint16_t uvb_data;
+  uint16_t uvcomp1_data;
+  uint16_t uvcomp2_data;
+
+
+
 
   struct bme280_data comp_data;
   dev.settings.osr_h = BME280_OVERSAMPLING_1X;
@@ -121,6 +130,14 @@ int main(void)
   rslt = bme280_init(&dev);
   rslt = bme280_set_sensor_settings(settings_sel, &dev);
   req_delay = bme280_cal_meas_delay(&dev.settings)*1000;
+
+  VEML6075_conf = VEML6075_CONF_DEFAULT | VEML6075_CONF_SD;
+  //rslt = VEML6075_write_word(VEML6075_ADDR, VEML6075_CONF_REG, VEML6075_conf);
+  /* Enable VEML6075 */
+  VEML6075_conf = VEML6075_CONF_DEFAULT;
+  //rslt = VEML6075_write_word(VEML6075_ADDR, VEML6075_CONF_REG, VEML6075_conf);
+  /* Loop for polling VEML6075 data */
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -130,9 +147,17 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_ID_REG, &uva_data);
+	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_UVB_DATA_REG, &uvb_data);
+	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_UVCOMP1_DATA_REG, &uvcomp1_data);
+	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_UVCOMP2_DATA_REG, &uvcomp2_data);
+
 	rslt = bme280_set_sensor_mode(BME280_FORCED_MODE, &dev);
 	dev.delay_us(req_delay, dev.intf_ptr);
 	rslt = bme280_get_sensor_data(BME280_ALL, &comp_data, &dev);
+	sprintf((char*)to_print_buf, "Humidity: %.2f\n\r", comp_data.humidity);
+	HAL_UART_Transmit(&huart2, to_print_buf, strlen(to_print_buf), HAL_MAX_DELAY);
+	HAL_Delay(500);
   }
   /* USER CODE END 3 */
 }
@@ -341,6 +366,21 @@ int8_t user_i2c_write(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, void *i
 	return status;
 
 }
+
+int i2c_transfer(struct i2c_msg *msgs, int num)
+{
+	struct i2c_msg* current_msg = &msgs[0];
+	HAL_StatusTypeDef stat;
+	stat = HAL_I2C_Master_Transmit(&hi2c1, current_msg->addr, current_msg->buf, current_msg->len, HAL_MAX_DELAY);
+	if (stat != HAL_OK) {
+		return stat;
+	} else if (num > 1) {
+		current_msg = &msgs[1];
+		stat = HAL_I2C_Master_Receive(&hi2c1, current_msg->addr, current_msg->buf, current_msg->len, HAL_MAX_DELAY);
+	}
+	return stat;
+}
+
 /* USER CODE END 4 */
 
 /**

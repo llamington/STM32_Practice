@@ -54,8 +54,8 @@ all: main-build
 main-build: bme_280_sensing.elf secondary-outputs
 
 # Tool invocations
-bme_280_sensing.elf: $(OBJS) $(USER_OBJS) C:\Users\lissi\STM32CubeIDE\workspace_1.5.0\bme_280_sensing\STM32F072RBTX_FLASH.ld
-	arm-none-eabi-gcc -o "bme_280_sensing.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"C:\Users\lissi\STM32CubeIDE\workspace_1.5.0\bme_280_sensing\STM32F072RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="bme_280_sensing.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+bme_280_sensing.elf: $(OBJS) $(USER_OBJS) C:\Users\lissi\STM32CubeIDE\workspace_1.5.0\STM32_Practice\bme_280_sensing\STM32F072RBTX_FLASH.ld
+	arm-none-eabi-gcc -o "bme_280_sensing.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"C:\Users\lissi\STM32CubeIDE\workspace_1.5.0\STM32_Practice\bme_280_sensing\STM32F072RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="bme_280_sensing.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
