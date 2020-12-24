@@ -212,6 +212,133 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x1df Core/Src/main.o
  .debug_macro   0x0000000000000000      0x174 Core/Src/main.o
  .debug_macro   0x0000000000000000      0x245 Core/Src/main.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .group         0x0000000000000000        0xc Core/Src/sensors.o
+ .text          0x0000000000000000        0x0 Core/Src/sensors.o
+ .data          0x0000000000000000        0x0 Core/Src/sensors.o
+ .bss           0x0000000000000000        0x0 Core/Src/sensors.o
+ .text.read_i2c_registers
+                0x0000000000000000       0x98 Core/Src/sensors.o
+ .debug_info    0x0000000000000000      0xf8f Core/Src/sensors.o
+ .debug_abbrev  0x0000000000000000      0x1da Core/Src/sensors.o
+ .debug_aranges
+                0x0000000000000000       0x20 Core/Src/sensors.o
+ .debug_ranges  0x0000000000000000       0x10 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x294 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0xa48 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x22 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x8e Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x51 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0xef Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x6a Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x1df Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x12d Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x2e Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x22 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x1c Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x22 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0xb5 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x391 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000     0xfe50 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x3c Core/Src/sensors.o
+ .debug_macro   0x0000000000000000     0x3461 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x174 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x55 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x946 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x5f3 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x12f Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x1a7 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x1a7 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x22c Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x34 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x43 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x28 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0xb0 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x217 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x22c Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x60 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0xa5 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x4c Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x16d Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x5a5 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x44 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x130 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x10 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0xee Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x40 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x18 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x46 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x3c Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x34 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x16 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x35 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x52 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x1f Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x43 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x20 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x1a3 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000      0x32a Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x16 Core/Src/sensors.o
+ .debug_macro   0x0000000000000000       0x29 Core/Src/sensors.o
+ .debug_line    0x0000000000000000      0x818 Core/Src/sensors.o
+ .debug_str     0x0000000000000000    0x8db10 Core/Src/sensors.o
+ .comment       0x0000000000000000       0x7c Core/Src/sensors.o
+ .debug_frame   0x0000000000000000       0x34 Core/Src/sensors.o
+ .ARM.attributes
+                0x0000000000000000       0x31 Core/Src/sensors.o
  .group         0x0000000000000000        0xc Core/Src/stm32f0xx_hal_msp.o
  .group         0x0000000000000000        0xc Core/Src/stm32f0xx_hal_msp.o
  .group         0x0000000000000000        0xc Core/Src/stm32f0xx_hal_msp.o
@@ -2907,6 +3034,7 @@ LOAD c:/st/stm32cubeide_1.5.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.exte
 LOAD c:/st/stm32cubeide_1.5.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.5.0.202011040924/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/crt0.o
 LOAD Core/Src/bme280.o
 LOAD Core/Src/main.o
+LOAD Core/Src/sensors.o
 LOAD Core/Src/stm32f0xx_hal_msp.o
 LOAD Core/Src/stm32f0xx_it.o
 LOAD Core/Src/syscalls.o
