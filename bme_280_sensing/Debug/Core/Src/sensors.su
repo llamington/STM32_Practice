@@ -1,1 +1,2 @@
-sensors.c:5:6:read_i2c_registers	56	static
+sensors.c:17:6:write_i2c_register	48	static
+sensors.c:31:6:read_i2c_register	48	static

@@ -24,9 +24,10 @@
 /* USER CODE BEGIN Includes */
 #include "string.h"
 #include "stdio.h"
-#include "bme280.h"
-#include "bme280_defs.h"
-#include "veml6075.h"
+//#include "veml6075.h"
+#include "sensors.h"
+#include "bme280_2.h"
+#include "veml6075_2.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,6 +47,8 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 
+SPI_HandleTypeDef hspi1;
+
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
@@ -56,7 +59,9 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
+void lora_transmit_data(char* print_buf);
 void user_delay_us(uint32_t period, void *intf_ptr);
 int8_t user_i2c_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, void *intf_ptr);
 int8_t user_i2c_write(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, void *intf_ptr);
@@ -74,38 +79,7 @@ int8_t user_i2c_write(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, void *i
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  struct bme280_dev dev;
-
-  int8_t rslt = BME280_OK;
-  uint8_t dev_addr = BME280_I2C_ADDR_PRIM;
-  dev.intf = BME280_I2C_INTF;
-  dev.read = user_i2c_read;
-  dev.write = user_i2c_write;
-  dev.delay_us = user_delay_us;
-  dev.intf_ptr = &dev_addr;
-
-  uint8_t settings_sel;
-  uint32_t req_delay;
-
-  uint16_t VEML6075_conf;
-  uint16_t uva_data;
-  uint16_t uvb_data;
-  uint16_t uvcomp1_data;
-  uint16_t uvcomp2_data;
-
-  uint16_t uva_calc;
-  uint16_t uvb_calc;
-
-
-
-  struct bme280_data comp_data;
-  dev.settings.osr_h = BME280_OVERSAMPLING_1X;
-  dev.settings.osr_p = BME280_OVERSAMPLING_16X;
-  dev.settings.osr_t = BME280_OVERSAMPLING_2X;
-  dev.settings.filter = BME280_FILTER_COEFF_16;
-
-  settings_sel = BME280_OSR_PRESS_SEL | BME280_OSR_TEMP_SEL | BME280_OSR_HUM_SEL | BME280_FILTER_SEL;
-  uint8_t to_print_buf[100];
+  char to_print_buf[100] = {0};
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -128,17 +102,10 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_I2C1_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-  rslt = bme280_init(&dev);
-  rslt = bme280_set_sensor_settings(settings_sel, &dev);
-  req_delay = bme280_cal_meas_delay(&dev.settings)*1000;
-
-  VEML6075_conf = VEML6075_CONF_DEFAULT | VEML6075_CONF_SD;
-  rslt = VEML6075_write_word(VEML6075_ADDR, VEML6075_CONF_REG, VEML6075_conf);
-  /* Enable VEML6075 */
-  VEML6075_conf = VEML6075_CONF_DEFAULT;
-  rslt = VEML6075_write_word(VEML6075_ADDR, VEML6075_CONF_REG, VEML6075_conf);
-  /* Loop for polling VEML6075 data */
+  bme280_init(&hi2c1);
+  veml6075_init(&hi2c1);
 
   /* USER CODE END 2 */
 
@@ -149,19 +116,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_UVA_DATA_REG, &uva_data);
-	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_UVB_DATA_REG, &uvb_data);
-	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_UVCOMP1_DATA_REG, &uvcomp1_data);
-	rslt = VEML6075_read_word(VEML6075_ADDR, VEML6075_UVCOMP2_DATA_REG, &uvcomp2_data);
-	uva_calc = uv_calc(uva_data, uvcomp1_data, uvcomp2_data, VEML6075_TYPE_UVA);
-	uvb_calc = uv_calc(uvb_data, uvcomp1_data, uvcomp2_data, VEML6075_TYPE_UVB);
-
-	rslt = bme280_set_sensor_mode(BME280_FORCED_MODE, &dev);
-	dev.delay_us(req_delay, dev.intf_ptr);
-	rslt = bme280_get_sensor_data(BME280_ALL, &comp_data, &dev);
-	sprintf((char*)to_print_buf, "Temperature: %.2f Humidity: %.2f UVA: %d UVB: %d\n\r", comp_data.temperature, comp_data.humidity, uva_calc, uvb_calc);
-	HAL_UART_Transmit(&huart2, to_print_buf, strlen(to_print_buf), HAL_MAX_DELAY);
-	HAL_Delay(500);
+	  bme280_read(&hi2c1);
+	  veml6075_read(&hi2c1);
+	  lora_transmit_data(to_print_buf);
+	  HAL_Delay(500);
   }
   /* USER CODE END 3 */
 }
@@ -256,6 +214,46 @@ static void MX_I2C1_Init(void)
 }
 
 /**
+  * @brief SPI1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI1_Init(void)
+{
+
+  /* USER CODE BEGIN SPI1_Init 0 */
+
+  /* USER CODE END SPI1_Init 0 */
+
+  /* USER CODE BEGIN SPI1_Init 1 */
+
+  /* USER CODE END SPI1_Init 1 */
+  /* SPI1 parameter configuration*/
+  hspi1.Instance = SPI1;
+  hspi1.Init.Mode = SPI_MODE_MASTER;
+  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi1.Init.CRCPolynomial = 7;
+  hspi1.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  hspi1.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+  if (HAL_SPI_Init(&hspi1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI1_Init 2 */
+
+  /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
   * @brief USART2 Initialization Function
   * @param None
   * @retval None
@@ -324,66 +322,14 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void user_delay_us(uint32_t period, void *intf_ptr)
+
+
+void lora_transmit_data(char* print_buf)
 {
-    /*
-     * Return control or wait,
-     * for a period amount of milliseconds
-     */
-	HAL_Delay(period/1000);
+	sprintf(print_buf, "G%.2fT%.2fH%.2fA%.2fB%.2f\n\r", sensor_data.air_pressure, sensor_data.air_temperature, sensor_data.air_humidity, sensor_data.uva, sensor_data.uvb);
+	HAL_UART_Transmit(&huart2, (uint8_t*)print_buf, strlen(print_buf), HAL_MAX_DELAY);
+	HAL_SPI_Transmit(&hspi1, (uint8_t*)print_buf, strlen(print_buf), HAL_MAX_DELAY);
 }
-
-int8_t user_i2c_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, void *intf_ptr)
-{
-    /* Return 0 for Success, non-zero for failure */
-
-    /*
-     * The parameter intf_ptr can be used as a variable to store the I2C address of the device
-     */
-    HAL_StatusTypeDef status;
-    uint8_t buf[] = {reg_addr};
-    uint8_t bme280_addr = *(uint8_t*)intf_ptr << 1;
-	status = HAL_I2C_Master_Transmit(&hi2c1, bme280_addr, buf, 1, HAL_MAX_DELAY);
-	if (status != HAL_OK) {
-		return status;
-	}
-	status = HAL_I2C_Master_Receive(&hi2c1, bme280_addr, reg_data, len, HAL_MAX_DELAY);
-	return status;
-}
-
-int8_t user_i2c_write(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, void *intf_ptr)
-{
-    /* Return 0 for Success, non-zero for failure */
-    /*
-     * The parameter intf_ptr can be used as a variable to store the I2C address of the device
-     */
-	uint32_t buf_len = len + 1;
-	uint8_t buf[buf_len];
-	buf[0] = reg_addr;
-	uint8_t bme280_addr = *(uint8_t*)intf_ptr << 1;
-	// concatenate the reg_addr along with the reg_data to the buffer
-	for(int i = 0; i < len; i++) {
-		buf[i+1] = reg_data[i];
-	}
-	HAL_StatusTypeDef status;
-	status = HAL_I2C_Master_Transmit(&hi2c1, bme280_addr, buf, buf_len, HAL_MAX_DELAY);
-	return status;
-
-}
-
-int i2c_transfer(struct i2c_msg *msgs, int num)
-{
-	struct i2c_msg* current_msg = &msgs[0];
-	HAL_StatusTypeDef stat;
-	if (num == 1) { // operation is a memory write
-		stat = HAL_I2C_Mem_Write(&hi2c1, current_msg->addr, current_msg->buf[0], I2C_MEMADD_SIZE_8BIT, &current_msg->buf[1], current_msg->len-1, HAL_MAX_DELAY);
-	} else { // operation is a memory read
-		struct i2c_msg* second_msg = &msgs[1];
-		stat = HAL_I2C_Mem_Read(&hi2c1, current_msg->addr, current_msg->buf[0], I2C_MEMADD_SIZE_8BIT, second_msg->buf, second_msg->len, HAL_MAX_DELAY);
-	}
-	return stat;
-}
-
 /* USER CODE END 4 */
 
 /**

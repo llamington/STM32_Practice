@@ -24,10 +24,12 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c_ex.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h \
+ ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_spi.h \
+ ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_spi_ex.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h \
- ../Core/Inc/veml6075.h ../Core/Inc/bme280.h ../Core/Inc/bme280_defs.h \
- ../Core/Inc/bme280_defs.h ../Core/Inc/veml6075.h
+ ../Core/Inc/sensors.h ../Core/Inc/bme280_2.h ../Core/Inc/sensors.h \
+ ../Core/Inc/veml6075_2.h
 
 ../Core/Inc/main.h:
 
@@ -81,16 +83,18 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h:
 
+../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_spi.h:
+
+../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_spi_ex.h:
+
 ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart.h:
 
 ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h:
 
-../Core/Inc/veml6075.h:
+../Core/Inc/sensors.h:
 
-../Core/Inc/bme280.h:
+../Core/Inc/bme280_2.h:
 
-../Core/Inc/bme280_defs.h:
+../Core/Inc/sensors.h:
 
-../Core/Inc/bme280_defs.h:
-
-../Core/Inc/veml6075.h:
+../Core/Inc/veml6075_2.h:

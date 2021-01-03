@@ -360,7 +360,6 @@ struct bme280_calib_data
     int8_t dig_h6;
 
     /*< Variable to store the intermediate temperature coefficient */
-    int32_t t_fine;
 };
 
 /*!
